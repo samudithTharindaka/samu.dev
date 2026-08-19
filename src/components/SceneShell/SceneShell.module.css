@@ -1,0 +1,28 @@
+.scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: var(--scene-height);
+  pointer-events: none;
+  overflow: hidden;
+  background: var(--color-bg-gradient);
+  z-index: 1;
+  opacity: 0;
+}
+
+.scene.active {
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: var(--page-pad);
+}
+
+.flush {
+  padding: 0;
+}
+

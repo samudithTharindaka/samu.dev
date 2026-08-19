@@ -1,0 +1,14 @@
+---
+description: Keep git commits clean — no Cursor or agent attribution
+alwaysApply: true
+---
+
+# Clean Git Commits
+
+When creating commits for this project:
+
+- Never add `Co-authored-by` trailers (including Cursor, Copilot, or any AI agent).
+- Never add `Made-with`, `Signed-off-by`, or similar attribution lines for AI tools.
+- Never mention Cursor, agents, or AI assistance in commit messages.
+- Write commit messages as if authored solely by the project owner.
+- Only create commits when the user explicitly asks.

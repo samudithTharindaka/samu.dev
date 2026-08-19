@@ -1,0 +1,83 @@
+.nav {
+  /* Spans from page edges; stairs sit toward center */
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  width: min(82vw, 1240px);
+  height: min(58vh, 620px);
+  color: var(--color-line);
+  pointer-events: none;
+}
+
+.lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.steps {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.step {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  pointer-events: auto;
+  /* Nestle into the stair corner: line runs through upper-left of the pill */
+  transform: translate(-42%, -58%);
+}
+
+.pill {
+  padding: 0.48rem 1.1rem;
+  border-radius: var(--radius-pill);
+  background: var(--nav-pill-bg);
+  font-size: clamp(0.75rem, 0.95vw, 0.875rem);
+  font-weight: 500;
+  color: var(--color-text);
+  transition:
+    background var(--dur-fast) var(--ease-out-soft),
+    color var(--dur-fast) var(--ease-out-soft),
+    transform var(--dur-fast) var(--ease-out-soft);
+}
+
+.pill:hover,
+.active {
+  background: var(--color-text);
+  color: var(--color-white);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .nav {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 1rem 1.25rem 0;
+    pointer-events: auto;
+  }
+
+  .lines {
+    display: none;
+  }
+
+  .steps {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    pointer-events: auto;
+  }
+
+  .step {
+    position: static;
+    transform: none;
+  }
+}

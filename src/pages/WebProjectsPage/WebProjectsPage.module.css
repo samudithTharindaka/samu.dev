@@ -1,0 +1,52 @@
+.page {
+  min-height: 100dvh;
+  padding: var(--page-pad);
+  padding-bottom: 4rem;
+  background: var(--color-bg-gradient);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: var(--text-h1);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.85rem;
+  max-width: 14ch;
+}
+
+.visit {
+  min-height: 2.25rem;
+}
+
+.lineWrap {
+  margin-bottom: 2rem;
+  max-width: 50%;
+  margin-left: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lineWrap {
+    max-width: 100%;
+  }
+
+  .title {
+    max-width: none;
+  }
+}

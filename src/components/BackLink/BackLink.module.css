@@ -1,0 +1,27 @@
+.back {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+  color: var(--color-text);
+  transition: opacity var(--dur-fast) var(--ease-out-soft);
+}
+
+.back:hover {
+  opacity: 0.65;
+}
+
+.back:hover .line {
+  transform: translateX(-4px);
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: var(--text-small);
+  font-weight: 400;
+}
+
+.line {
+  display: block;
+  transition: transform var(--dur-fast) var(--ease-out-soft);
+}
