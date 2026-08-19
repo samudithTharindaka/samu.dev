@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import gsap from "gsap";
 import { HeroScene } from "../../scenes/HeroScene/HeroScene";
 import { AboutScene } from "../../scenes/AboutScene/AboutScene";
@@ -11,9 +12,21 @@ import styles from "./HomePage.module.css";
 
 export function HomePage() {
   const stageRef = useRef<HTMLDivElement>(null);
-  const { activeIndex, goTo, controller } = useSnapScenes(scenes.length, true);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Read the desired start scene from ?scene=N before initialising the controller
+  const targetSceneParam = searchParams.get("scene");
+  const initialIndex =
+    targetSceneParam !== null ? Math.max(0, parseInt(targetSceneParam, 10)) : 0;
+
+  const { activeIndex, goTo, controller } = useSnapScenes(
+    scenes.length,
+    true,
+    initialIndex,
+  );
   const ready = useRef(false);
 
+  // Initialise panel visibility immediately — no transition needed on first paint
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
@@ -22,13 +35,21 @@ export function HomePage() {
     );
     panels.forEach((panel, index) => {
       gsap.set(panel, {
-        autoAlpha: index === 0 ? 1 : 0,
+        autoAlpha: index === initialIndex ? 1 : 0,
         yPercent: 0,
+        visibility: index === initialIndex ? "visible" : "hidden",
       });
     });
     ready.current = true;
+
+    // Clean the URL param so it doesn't persist on refresh
+    if (targetSceneParam !== null) {
+      setSearchParams({}, { replace: true });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Animate scene transitions driven by the controller
   useEffect(() => {
     if (!controller || !stageRef.current) return;
 

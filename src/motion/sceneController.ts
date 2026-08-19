@@ -57,6 +57,11 @@ export class SceneController {
     };
   }
 
+  /** Silently move the internal index without firing listeners or locking — use on init only */
+  seed(index: number) {
+    this.index = Math.max(0, Math.min(this.total - 1, index));
+  }
+
   goTo(next: number) {
     if (this.locked) return;
     const clamped = Math.max(0, Math.min(this.total - 1, next));

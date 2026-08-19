@@ -9,8 +9,8 @@ import { stopLenis, startLenis } from "./lenis";
 /**
  * Hook that owns the home-page snap journey.
  */
-export function useSnapScenes(total: number, enabled: boolean) {
-  const [activeIndex, setActiveIndex] = useState(0);
+export function useSnapScenes(total: number, enabled: boolean, initialIndex = 0) {
+  const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [controller, setController] = useState<SceneController | null>(null);
 
   useEffect(() => {
@@ -21,6 +21,7 @@ export function useSnapScenes(total: number, enabled: boolean) {
 
     stopLenis();
     const ctrl = new SceneController({ total, duration: 0.85 });
+    if (initialIndex > 0) ctrl.seed(initialIndex);
     setController(ctrl);
 
     const detachInput = ctrl.attach();

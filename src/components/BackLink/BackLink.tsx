@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
 import styles from "./BackLink.module.css";
 
 type BackLinkProps = {
@@ -12,8 +13,27 @@ export function BackLink({
   label = "Back",
   className = "",
 }: BackLinkProps) {
+  const navigate = useNavigate();
+
+  function handleClick(e: React.MouseEvent) {
+    e.preventDefault();
+    gsap.to(document.body, {
+      autoAlpha: 0,
+      duration: 0.45,
+      ease: "power2.inOut",
+      onComplete: () => {
+        navigate(to);
+        gsap.set(document.body, { autoAlpha: 1 });
+      },
+    });
+  }
+
   return (
-    <Link to={to} className={`${styles.back} ${className}`}>
+    <a
+      href={to}
+      onClick={handleClick}
+      className={`${styles.back} ${className}`}
+    >
       <span className={styles.label}>{label}</span>
       <span className={styles.line} aria-hidden>
         <svg width="72" height="10" viewBox="0 0 72 10" fill="none">
@@ -26,6 +46,6 @@ export function BackLink({
           />
         </svg>
       </span>
-    </Link>
+    </a>
   );
 }

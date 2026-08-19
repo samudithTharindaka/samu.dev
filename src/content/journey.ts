@@ -49,18 +49,51 @@ export type JourneyMilestone = {
   logo?: LogoKey;
   /** Staircase column index — milestones with the same step share a vertical segment */
   step: number;
+  /**
+   * Width of the horizontal tread that exits this column, in rem.
+   * Leave undefined to use the global default (10rem).
+   */
+  stepWidth?: number;
+  /**
+   * Height of this vertical riser as a fraction of the track height (0–1).
+   * Steps without an explicit stepHeight share the remaining height equally.
+   */
+  stepHeight?: number;
+};
+
+/**
+ * An empty riser column — no milestones, just a vertical line segment.
+ * Use this to add a lead-in or spacer step at the start.
+ */
+export type JourneyLeadIn = {
+  id: string;
+  step: number;
+  stepWidth?: number;
+  stepHeight?: number;
+  leadIn: true;
 };
 
 export type JourneyTrack = {
   id: "interactive" | "business";
   title: string;
   milestones: JourneyMilestone[];
+  /** Optional empty lead-in/spacer risers rendered before milestones */
+  leadIns?: JourneyLeadIn[];
 };
 
 export const journeys: Record<JourneyTrack["id"], JourneyTrack> = {
   interactive: {
     id: "interactive",
     title: "Interactive Dev Journey",
+    leadIns: [
+      {
+        id: "lead0",
+        step: 0,
+        stepWidth: 1,    // weight 1 → short tread (narrower than the rest)
+        stepHeight: 0.28,
+        leadIn: true,
+      },
+    ],
     milestones: [
       {
         id: "j1",
@@ -68,14 +101,16 @@ export const journeys: Record<JourneyTrack["id"], JourneyTrack> = {
         title: "Junior Game Developer",
         company: "Sea Pony Studios",
         logo: "seapony",
-        step: 0,
+        step: 1,
+        stepWidth: 2,    // weight 2 → equal wide treads
+        stepHeight: 0.28,
       },
       {
         id: "j2",
         year: "2023",
         title: "Game Developer",
         company: "Sea Pony Studios",
-        step: 0,
+        step: 1,
       },
       {
         id: "j3",
@@ -84,7 +119,9 @@ export const journeys: Record<JourneyTrack["id"], JourneyTrack> = {
         subtitle: "(Contract - 6 Months)",
         company: "MBDC",
         logo: "mbdc",
-        step: 1,
+        step: 2,
+        stepWidth: 2,
+        stepHeight: 0.22,
       },
       {
         id: "j4",
@@ -92,7 +129,9 @@ export const journeys: Record<JourneyTrack["id"], JourneyTrack> = {
         title: "Game Developer",
         company: "Veryability",
         logo: "veryability",
-        step: 2,
+        step: 3,
+        stepWidth: 2,
+        stepHeight: 0.22,
       },
       {
         id: "j5",
@@ -100,7 +139,9 @@ export const journeys: Record<JourneyTrack["id"], JourneyTrack> = {
         title: "Associate Software Engineer",
         company: "TWIST Digital",
         logo: "twist",
-        step: 3,
+        step: 4,
+        stepWidth: 2,
+        stepHeight: 0.22,
       },
     ],
   },
@@ -150,13 +191,28 @@ export function getJourney(type: string): JourneyTrack | undefined {
   return undefined;
 }
 
-export function groupMilestonesByStep(
-  milestones: JourneyMilestone[],
-): JourneyMilestone[][] {
-  const groups: JourneyMilestone[][] = [];
-  for (const milestone of milestones) {
-    const bucket = groups[milestone.step] ?? (groups[milestone.step] = []);
-    bucket.push(milestone);
+export type StepGroup =
+  | { kind: "leadIn"; leadIn: JourneyLeadIn; stepWidth?: number; stepHeight?: number }
+  | { kind: "milestones"; milestones: JourneyMilestone[]; stepWidth?: number; stepHeight?: number };
+
+export function buildStepGroups(track: JourneyTrack): StepGroup[] {
+  const map = new Map<number, StepGroup>();
+
+  // Register lead-ins first
+  for (const li of track.leadIns ?? []) {
+    map.set(li.step, { kind: "leadIn", leadIn: li, stepWidth: li.stepWidth, stepHeight: li.stepHeight });
   }
-  return groups.filter(Boolean);
+
+  // Register milestone groups
+  for (const m of track.milestones) {
+    if (!map.has(m.step)) {
+      map.set(m.step, { kind: "milestones", milestones: [], stepWidth: m.stepWidth, stepHeight: m.stepHeight });
+    }
+    const group = map.get(m.step)!;
+    if (group.kind === "milestones") group.milestones.push(m);
+  }
+
+  return [...map.entries()]
+    .sort(([a], [b]) => a - b)
+    .map(([, g]) => g);
 }

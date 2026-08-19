@@ -3,9 +3,9 @@
   --rail-gap: 0.35rem;
   --dot-size: 0.58rem;
   --rail-x: calc(var(--year-w) + var(--rail-gap));
-  /* Compact tread width — like the red guide, not full-bleed */
-  --step-x: clamp(3.25rem, 7.5vw, 5.75rem);
   --pad: var(--page-pad);
+  /* How far from the bottom the staircase stops */
+  --bottom-offset: 28%;
 
   box-sizing: border-box;
   position: relative;
@@ -19,14 +19,14 @@
 .header {
   position: absolute;
   top: var(--pad);
-  left: var(--pad);
+  left: clamp(4rem, 12vw, 18rem);
   z-index: 3;
   pointer-events: none;
 }
 
 .title {
   font-size: var(--text-h1);
-  font-weight: 700;
+  font-weight: 200;
   letter-spacing: -0.03em;
 }
 
@@ -39,13 +39,17 @@
 
 .track {
   position: absolute;
-  inset: 0;
+  /* Track occupies the vertical strip between title bottom and bottom-offset */
+  top: calc(var(--pad) + 5rem);
+  left: 0;
+  right: 0;
+  bottom: var(--bottom-offset);
   container-type: size;
 }
 
 .step {
   position: absolute;
-  left: calc(var(--pad) + (var(--c) * var(--step-x)));
+  left: calc(var(--left-vw));
   top: calc(var(--top) * 100%);
   height: calc(var(--h) * 100%);
   padding-left: var(--rail-x);
@@ -59,23 +63,42 @@
   flex: 1 1 auto;
   min-height: 0;
   margin: 0;
-  padding: 0.55rem 0 0.35rem;
+  padding: 0.5rem 0 0.3rem;
   list-style: none;
   border-left: 1.5px solid var(--color-line);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.55rem;
+  justify-content: space-evenly;
+  gap: 0.4rem;
 }
 
-/* First rail starts at the top edge of the page */
-.step:first-child .rail {
-  padding-top: calc(var(--pad) + 3.1rem);
+/* First riser — extend upward all the way to the top of the page */
+.step:first-child {
+  top: 0;
+  height: calc((var(--top) + var(--h)) * 100%);
 }
 
-/* Last rail finishes into the bottom edge */
-.step:last-child .rail {
-  padding-bottom: 0;
+/* Extend the first riser upward from the track top to the page top */
+.step:first-child::before {
+  content: "";
+  position: absolute;
+  left: var(--rail-x);
+  bottom: 100%;
+  width: 1.5px;
+  height: calc(var(--pad) + 5rem);
+  background: var(--color-line);
+  pointer-events: none;
+}
+
+/* Lead-in riser: just the vertical line, no content */
+.leadIn {
+  pointer-events: none;
+}
+
+.railLine {
+  flex: 1 1 auto;
+  min-height: 0;
+  border-left: 1.5px solid var(--color-line);
 }
 
 .milestone {
@@ -96,8 +119,8 @@
   border: 1px solid #e0e0e0;
   border-radius: 0.45rem;
   background: var(--color-white);
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-size: clamp(0.82rem, 1vw, 1rem);
+  font-weight: 300;
   letter-spacing: 0.01em;
 }
 
@@ -121,17 +144,18 @@
 }
 
 .logo {
-  width: 1.7rem;
-  height: 1.7rem;
+  width: 3rem;
+  height: 3rem;
   object-fit: contain;
-  border-radius: 0.28rem;
+  border-radius: 0.5rem;
   background: var(--color-white);
-  margin-bottom: 0.05rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.45rem;
 }
 
 .role {
-  font-size: clamp(0.86rem, 1.25vw, 1.1rem);
-  font-weight: 700;
+  font-size: clamp(1.2rem, 2vw, 1.75rem);
+  font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
@@ -139,26 +163,28 @@
 .subtitle {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: clamp(0.82rem, 1vw, 1rem);
   color: var(--color-text-muted);
   line-height: 1.15;
 }
 
+/* Horizontal tread connecting this riser to the next */
 .connector {
   flex: 0 0 auto;
   height: 1.5px;
-  width: var(--step-x);
+  width: var(--tread-vw);
   margin-left: 0;
   background: var(--color-line);
   transform: translateY(50%);
 }
 
-/* From last riser across to the right page edge */
+/* Final horizontal tail — runs to the right page edge */
 .endRun {
   position: absolute;
   left: var(--rail-x);
   bottom: 0;
-  width: calc(100cqw - var(--pad) - (var(--c) * var(--step-x)) - var(--rail-x));
+  /* stretch to right edge of viewport */
+  right: calc(-1 * var(--left-vw));
   height: 1.5px;
   background: var(--color-line);
 }
@@ -198,26 +224,31 @@
     container-type: normal;
   }
 
-  .step {
+  .step,
+  .step:first-child {
     position: static;
     left: auto;
     top: auto;
     height: auto;
     padding-left: 0;
+    padding-top: 0;
   }
 
-  .step:first-child .rail {
-    padding-top: 0;
+  .step:first-child::before {
+    display: none;
   }
 
   .rail {
     gap: 0.85rem;
     border-left-color: transparent;
     padding: 0;
+    justify-content: flex-start;
   }
 
   .connector,
-  .endRun {
+  .endRun,
+  .leadIn,
+  .railLine {
     display: none;
   }
 
