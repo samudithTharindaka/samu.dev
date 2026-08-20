@@ -54,16 +54,24 @@ export function PillButton(props: ButtonProps | LinkProps) {
   );
 }
 
-export function ArrowIcon({ direction = "up-right" }: { direction?: "up-right" | "down-right" | "left" }) {
+export function ArrowIcon({
+  direction = "up-right",
+  className = "",
+}: {
+  direction?: "up-right" | "down-right" | "left";
+  className?: string;
+}) {
   if (direction === "left") {
     return (
-      <svg width="18" height="10" viewBox="0 0 18 10" fill="none" aria-hidden>
+      <svg width="18" height="10" viewBox="0 0 18 10" fill="none" aria-hidden className={className}>
         <path d="M17 5H1M1 5L5 1M1 5L5 9" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
   }
 
-  const rotation = direction === "down-right" ? 90 : 0;
+  const directionClass =
+    direction === "down-right" ? styles.arrowDownRight : styles.arrowUpRight;
+
   return (
     <svg
       width="14"
@@ -71,7 +79,7 @@ export function ArrowIcon({ direction = "up-right" }: { direction?: "up-right" |
       viewBox="0 0 14 14"
       fill="none"
       aria-hidden
-      style={{ transform: `rotate(${rotation}deg)` }}
+      className={`${styles.arrow} ${directionClass} ${className}`.trim()}
     >
       <path
         d="M3 11L11 3M11 3H5M11 3V9"

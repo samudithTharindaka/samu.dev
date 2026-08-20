@@ -1,6 +1,17 @@
 import gsap from "gsap";
 
 /**
+ * Dash units for a shape. An authored `pathLength` normalises the dash
+ * pattern, which keeps the draw correct when the shape is stretched by a
+ * viewBox or resized after the tween was set up; otherwise fall back to the
+ * measured geometry.
+ */
+function dashLength(path: SVGGeometryElement): number {
+  const authored = Number(path.getAttribute("pathLength"));
+  return authored > 0 ? authored : path.getTotalLength();
+}
+
+/**
  * Draw an SVG path from 0 → progress (0..1).
  * Works with any path that supports getTotalLength().
  */
@@ -10,7 +21,7 @@ export function drawLine(
   options: { duration?: number; ease?: string; immediate?: boolean } = {},
 ) {
   if (!path) return;
-  const length = path.getTotalLength();
+  const length = dashLength(path);
   const { duration = 1.1, ease = "power2.inOut", immediate = false } = options;
   const clamped = Math.max(0, Math.min(1, progress));
 
@@ -40,7 +51,7 @@ export function prepareDrawPaths(
     root.querySelectorAll(selector),
   ) as SVGGeometryElement[];
   paths.forEach((path) => {
-    const length = path.getTotalLength();
+    const length = dashLength(path);
     gsap.set(path, {
       strokeDasharray: length,
       strokeDashoffset: length,

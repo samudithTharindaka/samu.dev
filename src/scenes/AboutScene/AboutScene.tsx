@@ -158,7 +158,7 @@ export function AboutScene({ active, controller }: AboutSceneProps) {
                 <PillButton
                   to={cta.to}
                   className={styles.cta}
-                  icon={<ArrowIcon />}
+                  icon={<ArrowIcon direction="down-right" />}
                 >
                   {cta.label}
                 </PillButton>

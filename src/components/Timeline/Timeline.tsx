@@ -13,19 +13,24 @@ type TimelineProps = {
   active?: boolean;
 };
 
+/** Path from ImageResources/Vector 7.svg — viewBox 0 0 199 831.5 */
+const VECTOR_7_PATH = "M0.5 0V525.5H87V612H145V774H198V831.5";
+
 export function Timeline({ items }: TimelineProps) {
   return (
     <div className={styles.timeline} data-timeline>
       <svg
         className={styles.line}
-        viewBox="0 0 120 520"
+        viewBox="0 0 199 831.5"
+        width="100%"
+        height="100%"
         fill="none"
         preserveAspectRatio="none"
         aria-hidden
       >
         <path
           data-draw
-          d="M40 0 V360 H70 V400 H100 V440 H120 V520"
+          d={VECTOR_7_PATH}
           stroke="currentColor"
           strokeWidth="1.5"
           vectorEffect="non-scaling-stroke"

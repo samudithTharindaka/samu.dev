@@ -66,6 +66,21 @@
   flex-shrink: 0;
 }
 
+.arrow {
+  display: block;
+  width: 14px;
+  height: 14px;
+  transition: transform var(--dur-fast) var(--ease-out-soft);
+}
+
+.arrowUpRight {
+  transform: rotate(0deg);
+}
+
+.arrowDownRight {
+  transform: rotate(90deg);
+}
+
 .solid .icon {
   background: rgba(255, 255, 255, 0.15);
 }
