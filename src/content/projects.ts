@@ -1,4 +1,5 @@
 import climateImpact from "../assets/projects/climate-impact.png";
+import taskflowDashboard from "../assets/projects/taskflow-dashboard.png";
 
 export type Project = {
   slug: string;
@@ -19,6 +20,16 @@ export const webProjects: Project[] = [
     description:
       "A Climate-Risk Intelligence Platform That Helps Businesses Understand, Measure, And Report The Financial Impact Of Climate Change. I Worked On Building The Digital Experience Behind A Platform That Connects Climate Data, Financial Analysis, And IFRS S2 Reporting.",
     image: climateImpact,
+    githubUrl: "#",
+    liveUrl: "#",
+  },
+  {
+    slug: "smart-task-management",
+    title: "Smart Task Management System",
+    tags: ["AI LLM Integration", "UI Design", "Fullstack", "VPS Hosting"],
+    description:
+      "TaskFLOW — A Modern Project Management Platform With Kanban Boards, List And Calendar Views, And An AI Assistant To Help Teams Plan, Track, And Complete Work Faster.",
+    image: taskflowDashboard,
     githubUrl: "#",
     liveUrl: "#",
   },
