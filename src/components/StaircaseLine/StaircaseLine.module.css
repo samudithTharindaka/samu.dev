@@ -4,8 +4,17 @@
 }
 
 .horizontal {
+  display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 1024 / 86;
+}
+
+.web {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 776 / 175;
 }
 
 .vertical {

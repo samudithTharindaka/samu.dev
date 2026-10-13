@@ -57,7 +57,7 @@ export const worksHub = {
     to: "/works/web",
   },
   games: {
-    title: "Some Game Related\nWorks I Did",
+    title: "Some Game Related Works I Did",
     visitLabel: "Visit",
     to: "/works/games",
   },

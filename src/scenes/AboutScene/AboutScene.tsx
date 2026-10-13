@@ -31,31 +31,33 @@ export function AboutScene({ active, controller }: AboutSceneProps) {
       revealedRef.current = 1;
       setRevealedCount(1);
       stepLockRef.current = false;
+      controller?.setIntentGate(null);
       return;
     }
     if (!controller) return;
 
     controller.setIntentGate((direction) => {
-      if (stepLockRef.current) return false;
-
       const total = aboutLines.length;
       const current = revealedRef.current;
 
-      if (direction === 1) {
-        if (current < total) {
-          stepLockRef.current = true;
-          const next = current + 1;
-          revealedRef.current = next;
-          setRevealedCount(next);
-          window.setTimeout(() => {
-            stepLockRef.current = false;
-          }, LINE_STEP_MS);
-          return false;
-        }
-        return true;
+      // All lines revealed — let the snap controller leave this scene
+      if (direction === 1 && current >= total) return true;
+      if (direction === -1 && current <= 1) return true;
+
+      if (stepLockRef.current) return false;
+
+      if (direction === 1 && current < total) {
+        stepLockRef.current = true;
+        const next = current + 1;
+        revealedRef.current = next;
+        setRevealedCount(next);
+        window.setTimeout(() => {
+          stepLockRef.current = false;
+        }, LINE_STEP_MS);
+        return false;
       }
 
-      if (current > 1) {
+      if (direction === -1 && current > 1) {
         stepLockRef.current = true;
         const next = current - 1;
         revealedRef.current = next;
@@ -65,6 +67,7 @@ export function AboutScene({ active, controller }: AboutSceneProps) {
         }, LINE_STEP_MS);
         return false;
       }
+
       return true;
     });
 
@@ -166,7 +169,17 @@ export function AboutScene({ active, controller }: AboutSceneProps) {
             ))}
           </div>
 
-          <div className={styles.next} data-next>
+          <button
+            type="button"
+            className={styles.next}
+            data-next
+            onClick={() => {
+              revealedRef.current = aboutLines.length;
+              setRevealedCount(aboutLines.length);
+              stepLockRef.current = false;
+              controller?.next();
+            }}
+          >
             <span>Next Page</span>
             <svg width="64" height="10" viewBox="0 0 64 10" fill="none" aria-hidden>
               <path
@@ -177,7 +190,7 @@ export function AboutScene({ active, controller }: AboutSceneProps) {
                 strokeLinejoin="round"
               />
             </svg>
-          </div>
+          </button>
         </div>
 
         <div className={styles.right}>

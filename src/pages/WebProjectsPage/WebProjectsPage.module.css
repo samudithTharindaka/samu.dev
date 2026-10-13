@@ -5,48 +5,109 @@
   background: var(--color-bg-gradient);
 }
 
+.hero {
+  position: relative;
+  margin-bottom: clamp(3.5rem, 8vh, 6rem);
+  /* Room for the larger Vector 9 staircase */
+  min-height: clamp(14rem, 28vh, 20rem);
+}
+
 .header {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1.5rem;
-  margin-bottom: 1.5rem;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  /* Sit title/button lower with the staircase; Back stays top-right */
+  padding-top: clamp(4.5rem, 12vh, 8rem);
+  padding-left: clamp(1.5rem, 5vw, 4rem);
 }
 
 .title {
-  font-size: var(--text-h1);
-  font-weight: 700;
+  margin: 0;
+  font-size: clamp(1.65rem, 3.2vw, 2.45rem);
+  font-weight: 400;
   letter-spacing: -0.03em;
-  margin-bottom: 0.85rem;
-  max-width: 14ch;
+  line-height: 1.12;
+  white-space: nowrap;
 }
 
 .visit {
-  min-height: 2.25rem;
+  min-height: 2.55rem;
+  padding: 0.5rem 0.95rem 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 0.75rem;
 }
 
+.visit span:last-child {
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+.visit svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+/* Vector 9 — starts at 40% width, runs to the right page edge */
 .lineWrap {
-  margin-bottom: 2rem;
-  max-width: 50%;
-  margin-left: auto;
+  position: absolute;
+  top: calc(-1 * var(--page-pad));
+  left: 40%;
+  right: calc(-1 * var(--page-pad));
+  width: auto;
+  line-height: 0;
+  color: var(--color-line);
+  pointer-events: none;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.85rem, 1.5vw, 1.25rem);
 }
 
-@media (max-width: 800px) {
-  .grid {
-    grid-template-columns: 1fr;
+@media (max-width: 900px) {
+  .hero {
+    min-height: 0;
+  }
+
+  .intro {
+    padding-top: 1.5rem;
+    padding-left: 0;
   }
 
   .lineWrap {
-    max-width: 100%;
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: 1.25rem;
+    margin-right: calc(-1 * var(--page-pad));
+    width: calc(100% + var(--page-pad));
   }
 
   .title {
-    max-width: none;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
   }
 }

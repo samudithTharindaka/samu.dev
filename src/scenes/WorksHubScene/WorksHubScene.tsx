@@ -16,6 +16,7 @@ export function WorksHubScene({ active }: WorksHubSceneProps) {
 
   useEffect(() => {
     if (!active || !rootRef.current) return;
+
     const paths = prepareDrawPaths(rootRef.current);
     paths.forEach((path) => drawLine(path, 1, { duration: 1.2 }));
 
@@ -38,26 +39,36 @@ export function WorksHubScene({ active }: WorksHubSceneProps) {
   }, [active]);
 
   return (
-    <SceneShell id="works" active={active}>
+    <SceneShell id="works" active={active} flush>
       <div className={styles.root} ref={rootRef}>
-        <div className={styles.top} data-works-block>
-          <h2 className={styles.title}>{worksHub.web.title}</h2>
-          <PillButton to={worksHub.web.to} variant="solid" className={styles.visit}>
-            {worksHub.web.visitLabel}
-          </PillButton>
-        </div>
+        <div className={styles.stack}>
+          <div className={styles.top} data-works-block>
+            <h2 className={styles.title}>{worksHub.web.title}</h2>
+            <PillButton
+              to={worksHub.web.to}
+              variant="solid"
+              className={styles.visit}
+            >
+              {worksHub.web.visitLabel}
+            </PillButton>
+          </div>
 
-        <div className={styles.lineWrap} aria-hidden>
-          <StaircaseLine variant="horizontal" />
-        </div>
+          <div className={styles.lineWrap} aria-hidden>
+            <StaircaseLine variant="horizontal" />
+          </div>
 
-        <div className={styles.bottom} data-works-block>
-          <h2 className={`${styles.title} ${styles.muted}`}>
-            {worksHub.games.title}
-          </h2>
-          <PillButton to={worksHub.games.to} variant="ghost" className={styles.visit}>
-            {worksHub.games.visitLabel}
-          </PillButton>
+          <div className={styles.bottom} data-works-block>
+            <h2 className={`${styles.title} ${styles.muted}`}>
+              {worksHub.games.title}
+            </h2>
+            <PillButton
+              to={worksHub.games.to}
+              variant="soft"
+              className={`${styles.visit} ${styles.visitMuted}`}
+            >
+              {worksHub.games.visitLabel}
+            </PillButton>
+          </div>
         </div>
       </div>
     </SceneShell>
